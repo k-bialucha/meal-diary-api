@@ -23,6 +23,24 @@ exports.getMeals = (req, res) => {
 };
 
 /**
+ * GET /meals/:id
+ * get specific meal
+ */
+exports.getMealById = (req, res) => {
+  const { id } = req.params;
+
+  const query = { _id: id };
+
+  Meal.find(query, (err, meal) => {
+    if (err) {
+      res.status(404);
+      res.send(err);
+    }
+    res.json(meal);
+  });
+};
+
+/**
  * POST /meals
  * Sending a new meal
  */
