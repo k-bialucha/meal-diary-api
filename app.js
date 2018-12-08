@@ -149,6 +149,7 @@ app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userControl
  *
  */
 app.get('/meals', mealController.getMeals);
+app.get('/meals/tags', mealController.getMealTags);
 app.get('/meals/:id', mealController.getMealById);
 app.post('/meals', mealController.postMeals);
 

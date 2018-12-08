@@ -41,6 +41,21 @@ exports.getMealById = (req, res) => {
 };
 
 /**
+ * GET /meals/tags
+ * get available tags
+ */
+exports.getMealTags = (req, res) => {
+  Meal.distinct('tag', {}, (err, tags) => {
+    if (err) {
+      res.status(400);
+      res.send(err);
+    }
+    tags.sort();
+    res.json(tags);
+  });
+};
+
+/**
  * POST /meals
  * Sending a new meal
  */
