@@ -148,9 +148,9 @@ app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userControl
  * Meal API calls
  *
  */
-app.get('/meals', mealController.getMeals);
-app.get('/meals/tags', mealController.getMealTags);
 app.get('/meals/:id', mealController.getMealById);
+app.get('/meals/tags', mealController.getMealTags);
+app.get('/meals', mealController.getMeals);
 app.post('/meals', mealController.postMeals);
 
 /**

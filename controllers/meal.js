@@ -31,12 +31,16 @@ exports.getMealById = (req, res) => {
 
   const query = { _id: id };
 
-  Meal.find(query, (err, meal) => {
+  Meal.findOne(query, (err, meal) => {
     if (err) {
-      res.status(404);
+      res.status(400);
       res.send(err);
+    } else if (!meal) {
+      res.status(404);
+      res.send({ error: 'not found' });
+    } else {
+      res.json(meal);
     }
-    res.json(meal);
   });
 };
 
