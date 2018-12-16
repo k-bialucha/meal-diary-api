@@ -5,13 +5,14 @@ const { Schema } = mongoose;
 const MealSchema = new Schema({
   name: {
     type: String,
+    required: true,
   },
   userId: {
     type: Schema.Types.ObjectId,
+    required: true
   },
   kcal: {
     type: Number,
-    // default: 999,
     required: true,
   },
   tag: {
@@ -21,9 +22,10 @@ const MealSchema = new Schema({
     type: String,
     default: 'X'
   },
-  created: {
+  date: {
     type: Date,
-    default: Date.now
+    default: Date.now,
+    required: true
   },
 });
 
