@@ -1,24 +1,51 @@
 const url = require('url');
+const moment = require('moment');
+
 const Meal = require('../models/Meal');
 
 /**
  * GET /meals
  * getting a list of meals
- * can be filtered by userId
+ * can be filtered by userId or date
  */
 exports.getMeals = (req, res) => {
   const urlParts = url.parse(req.url, true);
   const userId = urlParts.query.id;
+  const { date } = urlParts.query;
+  const momentDate = moment(date, 'DD-MM-YYYY');
+
   let query = {};
-
   if (userId) { query = { userId }; }
+  if (date) {
+    query = {
+      ...query,
+      date: {
+        $gte: momentDate.toDate(),
+        $lte: moment(momentDate).endOf('day').toDate()
+      }
+    };
+  }
 
-  Meal.find(query, (err, meal) => {
+  Meal.find(query, (err, meals) => {
     if (err) {
       if (err.path === 'userId') { res.status(404); } else { res.status(400); }
       res.send(err);
     }
-    res.json(meal);
+
+    // const mealsWithDate = meals.map((meal) => {
+    //   const newDate = moment(meal.date).format('DD-MM-YYYY HH:mm');
+    //   return {
+    //     _id: meal._id,
+    //     userId: meal.userId,
+    //     type: meal.type,
+    //     name: meal.name,
+    //     photo: meal.photo,
+    //     kcal: meal.kcal,
+    //     date: newDate
+    //   };
+    // });
+
+    res.json(meals);
   });
 };
 
