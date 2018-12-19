@@ -90,7 +90,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use((req, res, next) => {
-  if (req.path === '/api/upload' || req.path === '/meals') {
+  if (req.path.substring(0, 6) === '/meals') {
+    next();
+  } else if (req.path === '/api/upload') {
     next();
   } else {
     lusca.csrf()(req, res, next);
@@ -152,6 +154,7 @@ app.get('/meals/:id', mealController.getMealById);
 app.get('/meals/tags', mealController.getMealTags);
 app.get('/meals', mealController.getMeals);
 app.post('/meals', mealController.postMeals);
+app.delete('/meals/:id', mealController.deleteMeal);
 
 /**
  * OAuth authentication routes. (Sign in)

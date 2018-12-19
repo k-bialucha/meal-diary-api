@@ -70,3 +70,21 @@ exports.postMeals = (req, res) => {
     res.json(meal);
   });
 };
+
+/**
+ * DELETE /meals/:id
+ * Delete existing meal
+ */
+exports.deleteMeal = (req, res) => {
+  const { id } = req.params;
+
+  Meal.findByIdAndRemove(id, (err) => {
+    if (err) {
+      res.status(400);
+      res.send(err);
+    } else {
+      res.status(204);
+      res.send();
+    }
+  });
+};
