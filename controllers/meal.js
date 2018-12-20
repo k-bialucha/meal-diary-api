@@ -115,3 +115,40 @@ exports.deleteMeal = (req, res) => {
     }
   });
 };
+
+
+/**
+ * GET /kcal
+ * get sum of kcal
+ */
+exports.getKcal = (req, res) => {
+  const urlParts = url.parse(req.url, true);
+  const userId = urlParts.query.userId;
+  const { date } = urlParts.query;
+  const momentDate = moment(date, 'DD-MM-YYYY');
+
+  let query2 = {};
+  if (userId)
+    query2 = { ...query2, userId };
+  if (date)
+    query2 = { ...query2, date: {
+      $gte: momentDate.toDate(),
+      $lte: moment(momentDate).endOf('day').toDate()
+    }
+  }
+
+    Meal.find(query2, (err, meals) => {
+    if (err) {
+        res.status(400);
+        res.send(err);
+      }
+      
+      let kcalSum = 0;
+      meals.forEach( (meal)=> {      
+        kcalSum += meal.kcal;
+      });
+      
+      res.status(200);
+      res.json(JSON.parse(kcalSum));
+  });
+};

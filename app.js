@@ -155,6 +155,7 @@ app.get('/meals/tags', mealController.getMealTags);
 app.get('/meals', mealController.getMeals);
 app.post('/meals', mealController.postMeals);
 app.delete('/meals/:id', mealController.deleteMeal);
+app.get('/kcal/:date', mealController.getKcal);
 
 /**
  * OAuth authentication routes. (Sign in)
