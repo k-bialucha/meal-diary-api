@@ -30,6 +30,10 @@ exports.getMeals = (req, res) => {
     if (err) {
       if (err.path === 'userId') { res.status(404); } else { res.status(400); }
       res.send(err);
+      return;
+    } else {
+      res.json(meals);
+      return;
     }
 
     // const mealsWithDate = meals.map((meal) => {
@@ -45,7 +49,6 @@ exports.getMeals = (req, res) => {
     //   };
     // });
 
-    res.json(meals);
   });
 };
 
