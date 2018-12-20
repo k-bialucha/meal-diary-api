@@ -22,7 +22,16 @@ exports.loginWithGoogle = (req, res) => {
           res.status(400);
           res.json({ message: 'saving in db error' });
         } else if (existingUser) {
-          res.json(existingUser);
+          existingUser.tokens.push({ kind: 'google', accessToken: token });
+
+          existingUser.save((err, savedUser) => {
+            if (err) {
+              res.status(400);
+              res.json({ message: 'saving in db error' });
+            } else {
+              res.json(savedUser);
+            }
+          });
         } else {
           const newUser = new User();
 
