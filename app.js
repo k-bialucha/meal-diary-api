@@ -93,8 +93,7 @@ app.use(flash());
 app.use((req, res, next) => {
   if (req.path.substring(0, 6) === '/meals') {
     next();
-  }
-  if (req.path === '/login/google') {
+  } else if (req.path === '/login/google') {
     next();
   } else if (req.path === '/api/upload') {
     next();
