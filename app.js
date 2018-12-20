@@ -35,6 +35,7 @@ const userController = require('./controllers/user');
 // const apiController = require('./controllers/api');
 const contactController = require('./controllers/contact');
 const mealController = require('./controllers/meal');
+const loginController = require('./controllers/login');
 
 /**
  * API keys and Passport configuration.
@@ -91,6 +92,9 @@ app.use(passport.session());
 app.use(flash());
 app.use((req, res, next) => {
   if (req.path.substring(0, 6) === '/meals') {
+    next();
+  }
+  if (req.path === '/login/google') {
     next();
   } else if (req.path === '/api/upload') {
     next();
@@ -160,6 +164,8 @@ app.get('/kcal/:date', mealController.getKcal);
 /**
  * OAuth authentication routes. (Sign in)
  */
+
+app.post('/login/google', loginController.loginWithGoogle);
 
 app.get('/auth/google', passport.authenticate('google', { scope: 'profile email' }));
 app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
