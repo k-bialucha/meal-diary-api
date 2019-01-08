@@ -19,6 +19,8 @@ const expressValidator = require('express-validator');
 const expressStatusMonitor = require('express-status-monitor');
 const sass = require('node-sass-middleware');
 
+const User = require('./models/User');
+
 // const multer = require('multer');
 // const upload = multer({ dest: path.join(__dirname, 'uploads') });
 
@@ -149,14 +151,29 @@ app.post('/account/password', passportConfig.isAuthenticated, userController.pos
 app.post('/account/delete', passportConfig.isAuthenticated, userController.postDeleteAccount);
 app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);
 
+const checkToken = (req, res, next) => {
+  const accessToken = req.header('authorization');
+
+  User.findOne({ tokens: [{ kind: 'google', accessToken }] }, (err, user) => {
+    if (err || !(user && user._id)) {
+      res.status(401);
+      res.json({ message: 'UNAUTHORIZED' });
+    } else {
+      req.user = user;
+      next();
+    }
+  });
+};
+
+
 /**
  * Meal API calls
  *
  */
 app.get('/meals/:id', mealController.getMealById);
 app.get('/meals/tags', mealController.getMealTags);
-app.get('/meals', mealController.getMeals);
-app.post('/meals', mealController.postMeals);
+app.get('/meals', checkToken, mealController.getMeals);
+app.post('/meals', checkToken, mealController.postMeals);
 app.delete('/meals/:id', mealController.deleteMeal);
 app.get('/kcal/:date', mealController.getKcal);
 
