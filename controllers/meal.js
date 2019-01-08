@@ -6,16 +6,16 @@ const Meal = require('../models/Meal');
 /**
  * GET /meals
  * getting a list of meals
- * can be filtered by userId or date
+ * can be filtered by date
  */
 exports.getMeals = (req, res) => {
+  const userId = req.user._id;
   const urlParts = url.parse(req.url, true);
-  const userId = urlParts.query.id;
+
   const { date } = urlParts.query;
   const momentDate = moment(date, 'DD-MM-YYYY');
 
-  let query = {};
-  if (userId) { query = { userId }; }
+  let query = { userId };
   if (date) {
     query = {
       ...query,
@@ -30,10 +30,8 @@ exports.getMeals = (req, res) => {
     if (err) {
       if (err.path === 'userId') { res.status(404); } else { res.status(400); }
       res.send(err);
-      return;
     } else {
       res.json(meals);
-      return;
     }
 
     // const mealsWithDate = meals.map((meal) => {
@@ -48,7 +46,6 @@ exports.getMeals = (req, res) => {
     //     date: newDate
     //   };
     // });
-
   });
 };
 
