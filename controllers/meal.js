@@ -55,8 +55,9 @@ exports.getMeals = (req, res) => {
  */
 exports.getMealById = (req, res) => {
   const { id } = req.params;
+  const userId = req.user._id;
 
-  const query = { _id: id };
+  const query = { _id: id, userId };
 
   Meal.findOne(query, (err, meal) => {
     if (err) {
