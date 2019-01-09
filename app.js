@@ -171,6 +171,7 @@ const checkToken = (req, res, next) => {
  *
  */
 app.get('/meals/tags', checkToken, mealController.getMealTags);
+app.get('/meals/kcal', checkToken, mealController.getMealsKcal);
 app.get('/meals/:id', mealController.getMealById);
 app.get('/meals', checkToken, mealController.getMeals);
 app.post('/meals', checkToken, mealController.postMeals);

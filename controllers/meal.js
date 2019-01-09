@@ -162,3 +162,42 @@ exports.getKcal = (req, res) => {
     res.json(JSON.parse(kcalSum));
   });
 };
+
+/**
+ * GET /meals/kcal
+ * get sum of kcal per user
+ * with optional 'date' parameter
+ */
+exports.getMealsKcal = (req, res) => {
+  const userId = req.user._id;
+
+  const urlParts = url.parse(req.url, true);
+  const { date } = urlParts.query;
+  const momentDate = moment(date, 'DD-MM-YYYY');
+
+  let query = { userId };
+  if (date) {
+    query = {
+      ...query,
+      date: {
+        $gte: momentDate.toDate(),
+        $lte: moment(momentDate).endOf('day').toDate()
+      }
+    };
+  }
+
+  Meal.find(query, (err, meals) => {
+    if (err) {
+      res.status(400);
+      res.send(err);
+    }
+
+    let kcalSum = 0;
+    meals.forEach((meal) => {
+      kcalSum += meal.kcal;
+    });
+
+    res.status(200);
+    res.json(JSON.parse(kcalSum));
+  });
+};
