@@ -170,8 +170,8 @@ const checkToken = (req, res, next) => {
  * Meal API calls
  *
  */
+app.get('/meals/tags', checkToken, mealController.getMealTags);
 app.get('/meals/:id', mealController.getMealById);
-app.get('/meals/tags', mealController.getMealTags);
 app.get('/meals', checkToken, mealController.getMeals);
 app.post('/meals', checkToken, mealController.postMeals);
 app.delete('/meals/:id', mealController.deleteMeal);

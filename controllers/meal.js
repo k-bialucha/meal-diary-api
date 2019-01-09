@@ -76,7 +76,10 @@ exports.getMealById = (req, res) => {
  * get available tags
  */
 exports.getMealTags = (req, res) => {
-  Meal.distinct('tag', {}, (err, tags) => {
+  const userId = req.user._id;
+  const query = { userId };
+
+  Meal.distinct('tag', query, (err, tags) => {
     if (err) {
       res.status(400);
       res.send(err);
@@ -91,7 +94,12 @@ exports.getMealTags = (req, res) => {
  * Sending a new meal
  */
 exports.postMeals = (req, res) => {
-  const meal = new Meal(req.body);
+  const newMeal = {
+    ...req.body,
+    userId: req.user._id,
+  };
+
+  const meal = new Meal(newMeal);
   meal.save((err, meal) => {
     if (err) { res.send(err); }
     res.json(meal);
