@@ -34,8 +34,7 @@ exports.loginWithGoogle = (req, res) => {
           });
         } else {
           const newUser = new User();
-
-          newUser.email = response.email;
+          newUser.email = response.payload.email;
           newUser.google = profile.id;
           newUser.profile = {
             name: profile.name,
