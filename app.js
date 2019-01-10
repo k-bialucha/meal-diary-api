@@ -184,6 +184,7 @@ app.get('/meals/kcal', checkToken, mealController.getMealsKcal);
 app.get('/meals/:id', checkToken, mealController.getMealById);
 app.get('/meals', checkToken, mealController.getMeals);
 app.post('/meals', checkToken, mealController.postMeals);
+app.patch('/meals/:id', checkToken, mealController.updateMeal);
 app.delete('/meals/:id', mealController.deleteMeal);
 app.get('/kcal/:date', mealController.getKcal);
 

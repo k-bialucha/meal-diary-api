@@ -108,6 +108,25 @@ exports.postMeals = (req, res) => {
 };
 
 /**
+ * PATCH /meals/:id
+ * Update existing meal
+ */
+exports.updateMeal = (req, res) => {
+  const { id } = req.params;
+  const update = req.body;
+
+  Meal.findByIdAndUpdate(id, update, (err) => {
+    if (err) {
+      res.status(400);
+      res.send(err);
+    } else {
+      res.status(204);
+      res.send();
+    }
+  });
+};
+
+/**
  * DELETE /meals/:id
  * Delete existing meal
  */
