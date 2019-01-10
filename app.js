@@ -154,7 +154,16 @@ app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userControl
 const checkToken = (req, res, next) => {
   const accessToken = req.header('authorization');
 
-  User.findOne({ tokens: [{ kind: 'google', accessToken }] }, (err, user) => {
+  const query = {
+    tokens: {
+      $elemMatch: {
+        kind: 'google',
+        accessToken
+      }
+    }
+  };
+
+  User.findOne(query, (err, user) => {
     if (err || !(user && user._id)) {
       res.status(401);
       res.json({ message: 'UNAUTHORIZED' });
